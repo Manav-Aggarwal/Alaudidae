@@ -9,7 +9,7 @@ Took me around 7 hours to get everything done.
 I must say it was one of the most fun and challenging things I've worked on, and 
 it has given me confidence that I can actually work on real world stuff now. 
 
-I'd love to work on more assignments like these during my time at your company.
+I'd love to work on more assignments like these while working with Alaudidae.
 Please find instructions on how to running the script in the README.MD file in the
 github repository that I've sent you.
 
@@ -17,8 +17,9 @@ I have put the KML of the drone path from the video in the repository as well an
 script I wrote has function that can generate KML files for any videos, if you need it.
 
 PS. I spent some time thinking about what we could do with this data. We could generate a 
-360 degree image of the terrain using panaroma and stiching these images together since they 
-must be overlapping by a certain extent. This will help our clients better visualize the area.
+360 degree image of the terrain using panaroma and stich these images together since they 
+must be overlapping by a certain extent. It could be useful to convert 3D terrain maps from these images as well.
+This will help our clients better visualize the area.
 
 Warm regards,
 Manav Aggarwal
