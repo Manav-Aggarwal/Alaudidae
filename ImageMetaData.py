@@ -1,11 +1,11 @@
+"""Module to extract GPS coordinates from geo-tagged images."""
+
 import piexif
 
 
 class ImageMetaData(object):
-    '''
-    Extract the exif data from any image. Data includes GPS coordinates,
-    Focal Length, Manufacture, and more.
-    '''
+    """Get GPS cooordinates from geo-tagged images."""
+
     exif_data = None
     img_path = None
 
@@ -15,19 +15,19 @@ class ImageMetaData(object):
         super(ImageMetaData, self).__init__()
 
     def get_exif_data(self):
-        """Returns a dictionary from the exif data of an PIL
-        Image item. Also converts the GPS Tags"""
+        """Get exif data from the image path."""
         self.exif_data = piexif.load(self.img_path)
         return self.exif_data
 
     def get_if_exist(self, data, key):
+        """Get the given key in the dictionary, if it exists."""
         if key in data:
             return data[key]
         return None
 
     def convert_to_degress(self, value):
-        """Helper function to convert the GPS coordinates
-        stored in the EXIF to degress in float format"""
+        """Helper function to convert the GPS coordinates stored in the EXIF to
+        degress in float format."""
         d0 = value[0][0]
         d1 = value[0][1]
         d = float(d0) / float(d1)
@@ -43,8 +43,8 @@ class ImageMetaData(object):
         return d + (m / 60.0) + (s / 3600.0)
 
     def get_lat_lng(self):
-        """Returns the latitude and longitude, if available, from the
-        provided exif_data (obtained through get_exif_data above)"""
+        """Get the latitude and longitude, if available, from the provided
+        exif_data (obtained through get_exif_data above)"""
         lat = None
         lng = None
         exif_data = self.get_exif_data()
@@ -58,7 +58,8 @@ class ImageMetaData(object):
                 gps_data, piexif.GPSIFD.GPSLongitude)
             gps_longitude_ref = self.get_if_exist(
                 gps_data, piexif.GPSIFD.GPSLongitudeRef)
-            if gps_latitude and gps_latitude_ref and gps_longitude and gps_longitude_ref:
+            if gps_latitude and gps_latitude_ref \
+                    and gps_longitude and gps_longitude_ref:
                 gps_latitude_ref = gps_latitude_ref.decode("utf-8")
                 gps_longitude_ref = gps_longitude_ref.decode("utf-8")
                 lat = self.convert_to_degress(gps_latitude)

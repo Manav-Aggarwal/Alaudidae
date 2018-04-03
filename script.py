@@ -1,3 +1,5 @@
+"""Technical assingnment for Skylark Drones."""
+
 import os
 import fnmatch
 import pysrt
@@ -10,8 +12,9 @@ from datetime import datetime, timedelta
 
 
 def constructImgMap(imgDir, imgPattern):
-    """Constructs a dictionary that maps images in the the image
-    directory to their corresponding GPS coordinates"""
+    """Construct a dictionary that maps images in the image directory to their
+    corresponding GPS coordinates by extracting EXIF data from the geotagged
+    images."""
     imgToGPS = {}
     listOfImages = os.listdir(imgDir)
     for image in listOfImages:
@@ -24,8 +27,8 @@ def constructImgMap(imgDir, imgPattern):
 
 
 def getImgInRadius(currCoords, imgToGPS, Radius):
-    """Get a list of images in the given radius of the given
-    coordinates from a image map to coordinates"""
+    """Get a list of images in the given radius of the given coordinates from a
+    image map to coordinates."""
     img_list = []
     for image, coords in imgToGPS.items():
         if vincenty(currCoords, coords).meters <= Radius:
@@ -34,39 +37,48 @@ def getImgInRadius(currCoords, imgToGPS, Radius):
 
 
 def getCoordsFromSub(sub):
+    """Get GPS coordinates from a subtitle item."""
     currLng, currLat, elevation = sub.text.split(',')
     return (currLat, currLng)
 
 
 def getImgListInRadius(subsList, imgToGPS, RADIUS):
+    """Go through a list of subtitle items, and gets a combined image list
+    containing images in the given radius of all the items."""
     img_list = []
     for sub in subsList:
         img_list += getImgInRadius(getCoordsFromSub(sub), imgToGPS, RADIUS)
     return img_list
 
 
-def getSubsFromTo(subs, currTime, nextTime):
+def getSubsFromTo(subs, currTime, endTime):
+    """Slice a subtitle file to get a list of items between the given times."""
     return subs.slice(
         starts_after={
             'minutes': currTime.minute,
             'seconds': currTime.second},
         starts_before={
-            'minutes': nextTime.minute,
-            'seconds': nextTime.second})
+            'minutes': endTime.minute,
+            'seconds': endTime.second})
 
 
 def writeDataToCSV(data, csvFileName):
+    """Writes the given data row-wise to the given csv file."""
     with open(csvFileName, "w") as csvFile:
         writer = csv.writer(csvFile)
         writer.writerows(data)
 
 
 def createPrefixFileName(prefix, filename, ext):
+    """Creates a appropriate filename out of the given prefix, filename, and
+    extension."""
     filename = filename.split(".")[0]
     return prefix + filename + "." + ext
 
 
 def processVideo(video, vid_path, imgToGPS):
+    """Creates a csv file containing images in the raidus VID_RADIUS out of a
+    given SRT file that contains GPS coordinates at different times."""
     subs = pysrt.open(vid_path)
     currTime = datetime(2000, 1, 1, minute=0, second=0)
     nextTime = currTime + timedelta(seconds=1)
@@ -83,6 +95,9 @@ def processVideo(video, vid_path, imgToGPS):
 
 
 def generate_kml(video, vid_path):
+
+    """Generate a KML out of a given SRT file that contains GPS coordinates at
+    different times."""
     subs = pysrt.open(vid_path)
     data = []
     for sub in subs:
@@ -98,6 +113,8 @@ def generate_kml(video, vid_path):
 
 
 def processAllVideos(imgToGPS, vidDir, vidPattern):
+    """Call processVideo and generate_kml on all the files in the given
+    directory matching the given pattern."""
     listOfVideos = os.listdir(vidDir)
     for video in listOfVideos:
         if fnmatch.fnmatch(video, vidPattern):
@@ -107,6 +124,7 @@ def processAllVideos(imgToGPS, vidDir, vidPattern):
 
 
 def readCSV(csvFileName):
+    """Read a CSV file and returns a dict containing its data."""
     data = []
     with open(csvFileName) as csvFile:
         reader = csv.DictReader(csvFile)
@@ -116,6 +134,9 @@ def readCSV(csvFileName):
 
 
 def processPOIFile(imgToGPS, csvFileName):
+    """Process a file containing points of interest with their GPS coordinates
+    to create a csv file that contains images in the radius POI_RADIUS of the
+    points of interest."""
     assetsData = readCSV(csvFileName)
     imagesData = []
     imagesData.append(["asset_name", "image_names"])
@@ -128,6 +149,8 @@ def processPOIFile(imgToGPS, csvFileName):
 
 
 def parseargs():
+    """Parse the given arguments to the file and return them in integer
+    form."""
     parser = argparse.ArgumentParser()
     parser.add_argument("VID_RADIUS", type=int)
     parser.add_argument("POI_RADIUS", type=int)
