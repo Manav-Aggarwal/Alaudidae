@@ -10,3 +10,11 @@ You can use these commands to install these modules:
   pip install pysrt
   pip install geopy
 ```
+The script takes two parameters:
+- VID_RADIUS: Radius used for the video with the drone coordinates at different times.
+- POI_RADIUS: Radius used for the points of interest csv file.
+
+Example usage:
+```
+  python script.py 35 50
+```
