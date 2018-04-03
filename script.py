@@ -166,4 +166,4 @@ VID_RADIUS, POI_RADIUS = parseargs()
 
 imgToGPS = constructImgMap(imgDir, imgPattern)
 processAllVideos(imgToGPS, vidDir, vidPattern)
-processPOIFile(imgToGPS, "assets.csv")
+processPOIFile(imgToGPS, "assets.csv") #Replace with the filename to process, if needed.
