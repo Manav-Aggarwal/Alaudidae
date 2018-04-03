@@ -31,6 +31,7 @@ def getImgInRadius(currCoords, imgToGPS, Radius):
     image map to coordinates."""
     img_list = []
     for image, coords in imgToGPS.items():
+        #Uses vincenty's formula to calculate distance between two coordinates.
         if vincenty(currCoords, coords).meters <= Radius:
             img_list.append(image)
     return img_list
