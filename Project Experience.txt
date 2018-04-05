@@ -14,7 +14,7 @@ Please find instructions on how to running the script in the README.MD file in t
 github repository located here: https://github.com/Manav-Aggarwal/Alaudidae/
 
 I have put the KML of the drone path from the video in the repository as well and the 
-script I wrote has function that can generate KML files for any videos, if you need it.
+script I wrote has a function that can generate KML files for any videos, if you need it.
 
 PS. I spent some time thinking about what we could do with this data. We could generate a 
 360 degree image of the terrain using panaroma and stich these images together since they 
